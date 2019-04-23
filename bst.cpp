@@ -1,5 +1,6 @@
 //Description: Implementations for the binary search tree class.
 
+
 #include "bst.h"
 #include "time.h"
 #include <iomanip>

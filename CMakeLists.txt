@@ -3,4 +3,4 @@ project(CS415Proj3)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_executable(CS415Proj3 main.cpp bst.h bst.cpp)
+add_executable(CS415Proj3 main.cpp bst.h bst.cpp Tree.cpp Tree.h)

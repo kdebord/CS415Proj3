@@ -4,7 +4,8 @@
 
 #include <iostream>
 #include <fstream>
-#include "bst.cpp"
+#include "bst.h"
+#include "Tree.h"
 using namespace std;
 
 int main(int argc, char* argv[]) {
@@ -58,7 +59,17 @@ int main(int argc, char* argv[]) {
         }
     }
     else if (first_choice == 'b'){
-        //2-3 code bb
+        Tree test;
+
+        test.insert(10);
+        test.insert(1);
+        test.insert(12);
+        test.insert(3);
+        test.insert(5);
+        test.insert(11);
+        test.insert(13);
+
+        cout << "Test tree created. linebreak here in degub to check it out\n";
     }
 
     else if (first_choice == 'c'){

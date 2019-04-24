@@ -8,12 +8,12 @@ Tree::Tree() {
 	top = NULL;
 }
 
-Node* Tree::insert(int nVal) {
+Node* Tree::insert(string nVal) {
 	insert(top, nVal);
 	return top;
 }
 
-Node* Tree::insert(Node* node, int val) {
+Node* Tree::insert(Node* node, string val) {
 	if (node == NULL) {
 		top = new Node(val);
 		return top;
@@ -60,10 +60,10 @@ Node* Tree::insert(Node* node, int val) {
 	return top;
 }
 
-Node* Tree::split(Node* node, int val) {
-	int k1;
-	int k2;
-	int k3;
+Node* Tree::split(Node* node, string val) {
+	string k1;
+	string k2;
+	string k3;
 
 	Node* par = node->parent;
 

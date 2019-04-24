@@ -17,63 +17,65 @@ int main(int argc, char* argv[]) {
 	}
 
 	cout << "Options: (a) BST, (b) 2-3 Tree, (c) Compare BST and 2-3 Tree\n";
-	cin >> first_choice;
-	if (first_choice == 'a') {
-        ifstream input(argv[1]);
-        BST myTree;
+	while(!isalpha(first_choice)) {
+        cin >> first_choice;
+        if (first_choice == 'a') {
+            ifstream input(argv[1]);
+            BST myTree;
 
-        if (input.is_open()) {
-            myTree.buildTree(input);
-            input.close();
-            while (1) {
-                choice = 0;
-                cout << "Options: (1) display index, (2) search, (3) save index, (4) quit\n";
-                cin >> choice;
+            if (input.is_open()) {
+                myTree.buildTree(input);
+                input.close();
+                while (1) {
+                    choice = 0;
+                    cout << "Options: (1) display index, (2) search, (3) save index, (4) quit\n";
+                    cin >> choice;
 
-                //Print index
-                if (choice == 1)
-                    myTree.printTree(cout);
+                    //Print index
+                    if (choice == 1)
+                        myTree.printTree(cout);
 
-                    //Search index for a word
-                else if (choice == 2)
-                    myTree.contains();
+                        //Search index for a word
+                    else if (choice == 2)
+                        myTree.contains();
 
-                    //Save index
-                else if (choice == 3) {
-                    string outputFile;
-                    cout << "Enter a filename to save your index to (Suggested: <filename>.txt) : ";
-                    cin >> outputFile;
-                    ofstream output(outputFile.c_str());
-                    myTree.printTree(output);
-                    output.close();
-                    cout << "Saved\n";
+                        //Save index
+                    else if (choice == 3) {
+                        string outputFile;
+                        cout << "Enter a filename to save your index to (Suggested: <filename>.txt) : ";
+                        cin >> outputFile;
+                        ofstream output(outputFile.c_str());
+                        myTree.printTree(output);
+                        output.close();
+                        cout << "Saved\n";
+                    }
+
+                        //Quit
+                    else
+                        break;
                 }
-
-                    //Quit
-                else
-                    break;
+            } else {
+                cout << "Invalid File Name. Restart Program.\n";
+                return 2;
             }
-        } else {
-            cout << "Invalid File Name. Restart Program.\n";
-            return 2;
+        } else if (first_choice == 'b') {
+            Tree test;
+
+            test.insert("a");
+            test.insert("b");
+            test.insert("c");
+            test.insert("d");
+            test.insert("e");
+            test.insert("f");
+            test.insert("g");
+            test.insert("h");
+
+            cout << "Test tree created. linebreak here in degub to check it out\n";
+        } else if (first_choice == 'c') {
+            //compare code
         }
-    }
-    else if (first_choice == 'b'){
-        Tree test;
-
-        test.insert(10);
-        test.insert(1);
-        test.insert(12);
-        test.insert(3);
-        test.insert(5);
-        test.insert(11);
-        test.insert(13);
-
-        cout << "Test tree created. linebreak here in degub to check it out\n";
-    }
-
-    else if (first_choice == 'c'){
-        //compare code
+        else
+            cout << "Invalid Input, try again:\n";
     }
 	return 0;
 }

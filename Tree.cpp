@@ -1,6 +1,9 @@
 #include <iostream>
 
 #include "Tree.h"
+#include "time.h"
+#include <iomanip>
+#include <sstream>
 
 using namespace std;
 
@@ -9,11 +12,12 @@ Tree::Tree() {
 }
 
 Node* Tree::insert(string nVal) {
-	insert(top, nVal);
+	int dist = 0;
+	insertHelper(top, nVal, 0, dist);
 	return top;
 }
 
-Node* Tree::insert(Node* node, string val) {
+Node* Tree::insertHelper(Node* node, string val, int line, int &distWords) {
 	if (node == NULL) {
 		top = new Node(val);
 		return top;
@@ -27,11 +31,12 @@ Node* Tree::insert(Node* node, string val) {
 			else {
 				node->large = node->small;
 				node->small = val;
+				node->lines.push_back(line);
 				node->full = true;
 			}
 		}
 		else {
-			insert(node->left, val);
+			insertHelper(node->left, val, line, distWords);
 		}
 	}
 	else if (val > node->large) {
@@ -41,11 +46,12 @@ Node* Tree::insert(Node* node, string val) {
 			}
 			else {
 				node->large = val;
+				node->lines.push_back(line);
 				node->full = true;
 			}
 		}
 		else {
-			insert(node->right, val);
+			insertHelper(node->right, val, line, distWords);
 		}
 	}
 	else {
@@ -53,7 +59,7 @@ Node* Tree::insert(Node* node, string val) {
 			split(node, val);
 		}
 		else {
-			insert(node->middle, val);
+			insertHelper(node->middle, val, line, distWords);
 		}
 	}
 
@@ -159,5 +165,140 @@ Node* Tree::split(Node* node, string val) {
 		par->full = true;
 
 		return par;
+	}
+}
+
+bool Tree::isEmpty(){
+	return top == NULL;
+}
+
+void Tree::inorderPrint(Node *t){
+	if(t->left == NULL && t->right == NULL && t->middle == NULL)
+	{
+		std:: cout << t->small << endl;
+		if(t->large != "")
+			std::cout << t->large << endl;
+	}
+	else if(t->left != NULL && t->right != NULL)
+	{
+		inorderPrint(t->left);
+		std:: cout << t->small << endl;
+		if(t->large != "")
+			std::cout << t->large << endl;
+		inorderPrint(t->right);
+	}
+	else if(t->left != NULL && t->right != NULL && t->middle != NULL)
+	{
+		inorderPrint(t->left);
+		std::cout << t->small << endl;
+		inorderPrint(t->middle);
+		std::cout << t->large << endl;
+		inorderPrint(t->right);
+	}
+
+}
+
+void Tree::printTree(ostream &out) {
+	out << "2-3 Tree Index:\n-------------------------\n";
+	printTreeHelper(top, out);
+}
+
+void Tree::printTreeHelper(Node *t, ostream &out) {
+	if(t == NULL)
+		return;
+	if(t->left == NULL && t->right == NULL && t->middle == NULL) {
+		out << setw(30) << std::left;
+		out << t->small << " " << t->lines[0];
+		for (int i = 1; i < t->lines.size(); i++)
+			out << ", " << t->lines[i];
+		out << endl;
+	}
+	else if(t->left != NULL && t->right != NULL) {
+		printTreeHelper(t->left, out);
+		out << setw(30) << std::left;
+		out << t->small << " " << t->lines[0];
+		for (int i = 1; i < t->lines.size(); i++)
+			out << ", " << t->lines[i];
+		out << endl;
+		printTreeHelper(t->right, out);
+	}
+	else if(t->left != NULL && t->right != NULL && t->middle != NULL) {
+		printTreeHelper(t->left, out);
+		out << setw(30) << std::left;
+		out << t->small << " " << t->lines[0];
+		for (int i = 1; i < t->lines.size(); i++)
+			out << ", " << t->lines[i];
+		out << endl;
+		printTreeHelper(t->middle, out);
+		out << setw(30) << std::left;
+		out << t->small << " " << t->lines[0];
+		for (int i = 1; i < t->lines.size(); i++)
+			out << ", " << t->lines[i];
+		out << endl;
+		printTreeHelper(t->right, out);
+	}
+
+}
+
+void Tree::buildTree(ifstream &input) {
+	int line = 1, numWords = 0, distWords = 0, treeHeight = 0;
+	stringstream tempWord;
+	double totalTime, finishTime, startTime = clock();
+	while(!input.eof()) {
+		string tempLine, tempWord;
+
+		//Reading a whole line of text from the file
+		getline(input, tempLine);
+		for (int i = 0; i < tempLine.length(); i++) {
+			while(tempLine[i] != ' ' && tempLine[i] != '\n' && i < tempLine.length() ){
+				tempWord.insert(tempWord.end(), tempLine[i]);
+				i++;
+			}
+
+			while(tempWord.length() > 0 && !isalnum(tempWord[tempWord.length() - 1]))
+				tempWord.resize(tempWord.size() -1);
+
+			if(tempWord.length() > 0)
+			{
+				insertHelper(top, tempWord, line, distWords);
+				numWords++;
+				tempWord.clear();
+			}
+		}
+		line++;
+	}
+
+	finishTime = clock();
+	totalTime = (double) (finishTime - startTime)/CLOCKS_PER_SEC;
+	treeHeight = findHeight(top);
+
+	cout << setw(40) << std::left;
+	cout << "Total number of words: " << numWords<< endl;
+
+	cout << setw(40) << std::left
+		 << "Total number of distinct words: " << distWords << endl;
+
+	cout << setw(40) << std::left
+		 <<"Total time spent building index: " << totalTime << endl;
+
+	cout << setw(40) << std::left
+		 <<"Height of BST is : " << treeHeight << endl;
+
+}
+
+
+int Tree::findHeight(Node *t) {
+	if(t == NULL)
+		return 0;
+	else{
+		int leftHeight = findHeight(t->left);
+		int rightHeight = findHeight(t->right);
+		int middleHeight = findHeight(t->middle);
+		if(leftHeight > rightHeight && leftHeight > middleHeight)
+			return(leftHeight+1);
+		else if(rightHeight > leftHeight && rightHeight > middleHeight)
+			return(rightHeight+1);
+		else
+			return(middleHeight+1);
 	}
 }

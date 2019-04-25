@@ -2,7 +2,9 @@
 #define TREE_H
 
 #include <iostream>
+#include <fstream>
 #include <string>
+#include <vector>
 
 using namespace std;
 
@@ -16,6 +18,7 @@ struct Node {
 	Node* right = NULL;
 	Node* parent = NULL;
 	bool full = false;
+	vector<int> lines;
 };
 
 class Tree {
@@ -23,13 +26,20 @@ public:
 	Tree();
 
 	Node* insert(string);
+	void inorderPrint(Node *t);
+	Node* top;
+	void printTree(ostream & out = cout);
+	void buildTree(ifstream & input);
 
 private:
-	Node* insert(Node*, string);
+	Node* insertHelper(Node*, string, int, int &);
 	Node* split(Node*, string);
+    bool isEmpty();
+	void containsHelper(const string & x, Node * t, Node* &result);
+	void insertHelper(const string &X, int line, Node *& t, int &distWords);
+	void printTreeHelper(Node *t, ostream & out);
+	int findHeight(Node *t);
 
-
-	Node* top;
 };
 
 #endif // TREE_H

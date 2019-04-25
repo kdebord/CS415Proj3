@@ -35,6 +35,7 @@ class BST{
 	bool containsHelper(const string & x, node * t, node* &result) const;
 	void printTreeHelper(node *t, ostream & out) const;
 	int findHeight(node *t);
+
 };
 	
 #endif	

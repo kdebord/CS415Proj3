@@ -59,18 +59,15 @@ int main(int argc, char* argv[]) {
                 return 2;
             }
         } else if (first_choice == 'b') {
-            Tree test;
+            Tree myTree;
+            ifstream input(argv[1]);
 
-            test.insert("a");
-            test.insert("b");
-            test.insert("c");
-            test.insert("d");
-            test.insert("e");
-            test.insert("f");
-            test.insert("g");
-            test.insert("h");
+                myTree.buildTree(input);
+                input.close();
 
-            cout << "Test tree created. linebreak here in degub to check it out\n";
+
+
+
         } else if (first_choice == 'c') {
             //compare code
         }

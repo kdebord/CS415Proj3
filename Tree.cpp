@@ -20,6 +20,8 @@ Node* Tree::insert(string nVal) {
 Node* Tree::insertHelper(Node* node, string val, int line, int &distWords) {
 	if (node == NULL) {
 		top = new Node(val);
+		top->lines.push_back(line);
+		distWords++;
 		return top;
 	}
 
@@ -64,6 +66,37 @@ Node* Tree::insertHelper(Node* node, string val, int line, int &distWords) {
 	}
 
 	return top;
+}
+
+void Tree::contains() {
+	string input;
+	Node *foundNode = NULL;
+	cout << "Search word: ";
+	cin >> input;
+	if(containsHelper(input, top, foundNode)) {
+		cout << "Line Numbers: " << foundNode->lines[0];
+		for(int i = 1; i < foundNode->lines.size(); i++)
+			cout << ", " << foundNode->lines[i];
+		cout << '\n';
+	} else
+		cout << '\"' << input << "\" is not in the document\n";
+}
+
+bool Tree::containsHelper(const string &x, Node *t, Node *&result) {
+	if (t == NULL)
+		return false;
+	if (t->small.compare(x) == 0 || t->large.compare(x) == 0){
+		result = t;
+		return true;
+	}
+	if(x < t->small)
+	    containsHelper(x, t->left, result);
+	if(t->small < t->large)
+	    containsHelper(x, t->right, result);
+	else if(x > t->large)
+	    containsHelper(x, t->right, result);
+	else
+		return false;
 }
 
 Node* Tree::split(Node* node, string val) {

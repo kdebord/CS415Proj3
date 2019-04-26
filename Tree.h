@@ -10,7 +10,7 @@ using namespace std;
 
 struct Node {
 	Node() { small = ""; large = ""; }
-	Node(string nVal) { small = nVal; large = ""; }
+	Node(string nVal) { small = nVal; large = ""; lines.resize(0);}
 	string small;
 	string large;
 	Node* left = NULL;
@@ -30,13 +30,13 @@ public:
 	Node* top;
 	void printTree(ostream & out = cout);
 	void buildTree(ifstream & input);
+	void contains();
 
 private:
 	Node* insertHelper(Node*, string, int, int &);
 	Node* split(Node*, string);
     bool isEmpty();
-	void containsHelper(const string & x, Node * t, Node* &result);
-	void insertHelper(const string &X, int line, Node *& t, int &distWords);
+	bool containsHelper(const string & x, Node * t, Node* &result);
 	void printTreeHelper(Node *t, ostream & out);
 	int findHeight(Node *t);
 
